@@ -16,6 +16,6 @@ class DashboardDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call("Modules\Dashboard\Database\Seeders\ContactsTableSeeder");
     }
 }
