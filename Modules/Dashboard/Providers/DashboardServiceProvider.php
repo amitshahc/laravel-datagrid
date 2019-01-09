@@ -2,8 +2,8 @@
 
 namespace Modules\Dashboard\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\ServiceProvider;
 
 class DashboardServiceProvider extends ServiceProvider
 {
@@ -21,6 +21,7 @@ class DashboardServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->registerRepositories();
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
@@ -28,6 +29,13 @@ class DashboardServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
+    public function registerRepositories()
+    {
+        $this->app->singleton(
+            'Modules\Dashboard\Entities\Repository\Interfaces\Contacts',
+            'Modules\Dashboard\Entities\Repository\Eloquents\Contacts'
+        );
+    }
     /**
      * Register the service provider.
      *
@@ -46,10 +54,10 @@ class DashboardServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('dashboard.php'),
+            __DIR__ . '/../Config/config.php' => config_path('dashboard.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'dashboard'
+            __DIR__ . '/../Config/config.php', 'dashboard'
         );
     }
 
@@ -62,11 +70,11 @@ class DashboardServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/dashboard');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
         $this->publishes([
-            $sourcePath => $viewPath
-        ],'views');
+            $sourcePath => $viewPath,
+        ], 'views');
 
         $this->loadViewsFrom(array_merge(array_map(function ($path) {
             return $path . '/modules/dashboard';
@@ -85,18 +93,18 @@ class DashboardServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'dashboard');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'dashboard');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'dashboard');
         }
     }
 
     /**
      * Register an additional directory of factories.
-     * 
+     *
      * @return void
      */
     public function registerFactories()
     {
-        if (! app()->environment('production')) {
+        if (!app()->environment('production')) {
             app(Factory::class)->load(__DIR__ . '/../Database/factories');
         }
     }
