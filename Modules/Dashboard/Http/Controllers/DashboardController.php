@@ -19,8 +19,8 @@ class DashboardController extends Controller
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
-    {
+    public function index(Request $request)
+    {return $request;
         $contacts = $this->repo->getList();
         return view('dashboard::index', compact('contacts'));
     }
