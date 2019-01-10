@@ -19,12 +19,19 @@ class DashboardController extends Controller
      * Display a listing of the resource.
      * @return Response
      */
-    public function index(Request $request)
-    {return $request;
+    public function index()
+    {//return $request;
         $contacts = $this->repo->getList();
         return view('dashboard::index', compact('contacts'));
     }
 
+    public function filter(Request $request)
+    {        
+        $filter = $request->only('name_operator','name_value','email_operator','email_value', 'phone_operator','phone_value',	'gender_value', 'age_operator','age_value');
+        $contacts = $this->repo->getFilteredList(array_filter($filter));
+
+        return view('dashboard::index', compact('contacts'))->withInput($request->all());
+    }
     /**
      * Show the form for creating a new resource.
      * @return Response
