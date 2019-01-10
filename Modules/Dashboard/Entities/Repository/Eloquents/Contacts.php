@@ -16,7 +16,8 @@ class Contacts implements ContactsContract
 
     public function getList(){
         // \DB::enableQueryLog();
-        return $this->model::all('id','name','email','phone','gender','age');
+        //return $this->model::select('id','name','email','phone','gender','age')->limit(100)->get();
+        return $this->model::select('id','name','email','phone','gender','age')->paginate(100);
         // dd(\DB::getQueryLog());
     }
 }

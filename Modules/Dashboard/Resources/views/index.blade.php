@@ -5,8 +5,79 @@
 <div class="table-responsive">
     <table class="table table-striped table-sm">
         <thead>
+            <form class="">
+                <tr>                    
+                    <td colspan="6">
+                        <div class="float-left text-info">
+                            Showing {{ $contacts->firstItem() }} to {{ $contacts->lastItem() }} of total
+                            {{$contacts->total()}} entries
+                        </div>
+                        <div class="float-right">
+                            {{ $contacts->links() }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="submit" value="Filter" class="btn-info">
+                    </th>
+                    <th>
+                        <select name="" id="" class="form-control-sm">
+                            <option value="=">=</option>
+                            <option value="<">
+                                <</option> <option value=">">>
+                            </option>
+                            <option value="like">like</option>
+                        </select>
+                        <br />
+                        <input type="text" name="id" value="" style="width:auto" class="form-control-sm" />
+                    </th>
+                    <th>
+                        <select name="" id="" class="form-control-sm">
+                            <option value="=">=</option>
+                            <option value="<">
+                                <</option> <option value=">">>
+                            </option>
+                            <option value="like">like</option>
+                        </select>
+                        <br />
+                        <input type="text" name="id" value="" style="width:auto" class="form-control-sm" />
+                    </th>
+                    <th>
+                        <select name="" id="" class="form-control-sm">
+                            <option value="=">=</option>
+                            <option value="<">
+                                <</option> <option value=">">>
+                            </option>
+                            <option value="like">like</option>
+                        </select>
+                        <br />
+                        <input type="text" name="id" value="" style="width:auto" class="form-control-sm" />
+                    </th>
+                    <th>
+                        <select name="" id="" class="form-control-sm">
+                            <option value="">- Any -</option>
+                            <option value="=">male</option>
+                            <option value="<">female</option>
+                            <option value=">">other</option>
+                        </select>
+                        <br />
+                        <input type="text" name="id" value="" style="width:auto" class="form-control-sm" />
+                    </th>
+                    <th>
+                        <select name="" id="" class="form-control-sm">
+                            <option value="=">=</option>
+                            <option value="<">
+                                <</option> <option value=">">>
+                            </option>
+                        </select>
+                        <br />
+                        <input type="text" name="id" value="" style="width:4rem" class="form-control-sm" />
+                    </th>
+                </tr>
+            </form>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
