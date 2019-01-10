@@ -6,11 +6,12 @@
     <table class="table table-striped table-sm">
         <thead>
             <tr>
-                <th>#</th>
-                <th>Header</th>
-                <th>Header</th>
-                <th>Header</th>
-                <th>Header</th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>Age</th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +19,10 @@
             <tr>
                 <td>{{$contact->id}}</td>
                 <td>{{$contact->name}}</td>
+                <td>{{$contact->email}}</td>
+                <td>{{$contact->phone}}</td>
+                <td>{{$contact->gender}}</td>
+                <td>{{$contact->age}}</td>
             </tr>
             @endforeach
         </tbody>
