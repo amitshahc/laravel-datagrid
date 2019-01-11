@@ -29,7 +29,7 @@ class DashboardController extends Controller
     {        
         $filter = $request->only('name_operator','name_value','email_operator','email_value', 'phone_operator','phone_value',	'gender_value', 'age_operator','age_value');
         $contacts = $this->repo->getFilteredList(array_filter($filter));
-
+        $contacts->appends($filter)->links(); //Continue pagination with results
         return view('dashboard::index', compact('contacts'))->withInput($request->all());
     }
     /**

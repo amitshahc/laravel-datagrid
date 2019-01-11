@@ -13,5 +13,5 @@
 
 Route::prefix('dashboard')->group(function() {
     Route::get('/', 'DashboardController@index')->name('contacts_dashboard');
-    Route::post('/', 'DashboardController@filter')->name('contacts_filter');
+    Route::get('/filter', 'DashboardController@filter')->name('contacts_filter');
 });

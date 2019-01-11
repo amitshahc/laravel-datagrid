@@ -5,9 +5,9 @@
 <div class="table-responsive">
     <table class="table table-striped table-sm">
         <thead>
-            <form action="{{ route('contacts_filter') }}" method="POST" class="">
-                @method('POST')
-                @csrf
+            <form action="{{ route('contacts_filter') }}" method="GET" class="">
+                {{-- @method('POST')
+                @csrf --}}
                 <tr>
                     <td colspan="6">
                         <div class="float-left text-info">
