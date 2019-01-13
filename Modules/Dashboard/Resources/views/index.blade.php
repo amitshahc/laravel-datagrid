@@ -37,10 +37,25 @@
                     </td>
 
                     <td colspan="3">
-                        Saved Filter                        
-                        Public: <select name="filters_public" id=""></select>
+                        Saved Filter
+                        <br />
+                        Public: 
+                        <select name="filters_public" id="" style="width:20%">
+                            @if(!$filters_public->isEmpty())
+                            @foreach ($filters_public as $filter)
+                            <option value="{{$filter->id}}">{{$filter->name}}</option>
+                            @endforeach
+                            @endif
+                        </select>
                         &nbsp;
-                        Private: <select name="filters_private" id=""></select>
+                        Private: 
+                        <select name="filters_private" id="" style="width:20%">
+                            @if(!$filters_private->isEmpty())
+                            @foreach ($filters_private as $filter)
+                            <option value="{{$filter->id}}">{{$filter->name}}</option>
+                            @endforeach
+                            @endif
+                        </select>
                     </td>
                 </tr>
                 <tr>

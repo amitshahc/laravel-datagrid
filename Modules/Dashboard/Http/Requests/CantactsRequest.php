@@ -16,6 +16,8 @@ class CantactsRequest extends FormRequest
         return [
             'email_value' => 'nullable|email',
             'age_value' => 'nullable|numeric',
+            'filter_name' => 'required_if:filter_save,1',
+            'filter_type' => 'required_if:filter_save,1'
         ];
     }
 
@@ -24,6 +26,16 @@ class CantactsRequest extends FormRequest
         return [
             'email_value' => 'Email',
             'age_value' => 'Age',
+            'filter_name' => 'Filter name',
+            'filter_type' => 'Filter type'
+        ];
+    }
+
+    public function messages()
+    {
+        return [          
+            'filter_name.required_if' => ':attribute is mandatory when Save Filter is checked',
+            'filter_type.required_if' => ':attribute is mandatory when Save Filter is checked'
         ];
     }
 

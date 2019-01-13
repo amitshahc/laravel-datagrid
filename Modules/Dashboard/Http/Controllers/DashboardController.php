@@ -2,12 +2,12 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Dashboard\Entities\Repository\Interfaces\Contacts as ContactsRepository;
 use Modules\Dashboard\Http\Requests\CantactsRequest;
-use Auth;
 
 class DashboardController extends Controller
 {
@@ -18,7 +18,7 @@ class DashboardController extends Controller
     {
         $this->repo = $repo;
 
-        $this->middleware(function ($request, $next) {            
+        $this->middleware(function ($request, $next) {
             $this->userId = Auth::user()->id;
             $this->repo->setUserId($this->userId);
             return $next($request);
@@ -31,24 +31,43 @@ class DashboardController extends Controller
     public function index()
     {
         $contacts = $this->repo->getList();
-        return view('dashboard::index', compact('contacts'));
+        $filters_public = $this->repo->getFilters_public();
+        $filters_private = $this->repo->getFilters_private();
+        return view('dashboard::index', compact('contacts','filters_public', 'filters_private'));
     }
 
     public function filter(CantactsRequest $request)
     {
+        // $filters_public = [];
+        // $filters_private = [];
+
         $filter = $request->only('name_operator', 'name_value', 'email_operator', 'email_value', 'phone_operator', 'phone_value', 'gender_value', 'age_operator', 'age_value');
+
+        try
+        {
+            $this->repo->beginTransaction();
+            if ($request->input('filter_save')) {
+
+                $data['name'] = $request->input('filter_name');
+                $data['public'] = $request->input('filter_type') == '1' ? true : false;
+                $data['fields'] = json_encode($filter);
+
+                $this->repo->createFilter($data);
+            }
+        } catch (\Execption $e) {
+            $this->repo->rollback();
+            report($e);
+            return back()->withErrors($e->getMessage())->withInput();
+        }
+
+        
         $contacts = $this->repo->getFilteredList(array_filter($filter));
         $contacts->appends($filter)->links(); //Continue pagination with results
+        $filters_public = $this->repo->getFilters_public();
+        $filters_private = $this->repo->getFilters_private();        
 
-        if ($request->input('filter_save')) {            
-            
-            $data['name'] = $request->input('filter_name');
-            $data['public'] = $request->input('filter_type') == '1' ? true : false;
-            $data['fields'] = json_encode($filter);
-
-            $this->repo->createFilter($data);
-        }
-        return view('dashboard::index', compact('contacts'))->withInput($request->all());
+        $this->repo->commit();
+        return view('dashboard::index', compact('contacts', 'filters_public', 'filters_private'))->withInput($request->all());
     }
     /**
      * Show the form for creating a new resource.
