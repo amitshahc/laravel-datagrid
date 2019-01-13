@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Dashboard\Entities\Repository\Interfaces\Contacts as ContactsRepository;
 use Modules\Dashboard\Http\Requests\CantactsRequest;
+use Modules\Dashboard\Http\Requests\FilterSaveRequest;
 
 class DashboardController extends Controller
 {
@@ -33,7 +34,7 @@ class DashboardController extends Controller
         $contacts = $this->repo->getList();
         $filters_public = $this->repo->getFilters_public();
         $filters_private = $this->repo->getFilters_private();
-        return view('dashboard::index', compact('contacts','filters_public', 'filters_private'));
+        return view('dashboard::index', compact('contacts', 'filters_public', 'filters_private'));
     }
 
     public function filter(CantactsRequest $request)
@@ -43,37 +44,19 @@ class DashboardController extends Controller
 
         $filter = $request->only('name_operator', 'name_value', 'email_operator', 'email_value', 'phone_operator', 'phone_value', 'gender_value', 'age_operator', 'age_value');
 
-        try
-        {
-            $this->repo->beginTransaction();
-            if ($request->input('filter_save')) {
-
-                $data['name'] = $request->input('filter_name');
-                $data['public'] = $request->input('filter_type') == '1' ? true : false;
-                $data['fields'] = json_encode($filter);
-
-                $this->repo->createFilter($data);
-            }
-        } catch (\Execption $e) {
-            $this->repo->rollback();
-            report($e);
-            return back()->withErrors($e->getMessage())->withInput();
-        }
-
-        
         $contacts = $this->repo->getFilteredList(array_filter($filter));
         $contacts->appends($filter)->links(); //Continue pagination with results
         $filters_public = $this->repo->getFilters_public();
-        $filters_private = $this->repo->getFilters_private();        
+        $filters_private = $this->repo->getFilters_private();
 
         $this->repo->commit();
-        return view('dashboard::index', compact('contacts', 'filters_public', 'filters_private'))->withInput($request->all());
+        return view('dashboard::index', compact('contacts', 'filters_public', 'filters_private'))->withInput($filter);
     }
     /**
      * Show the form for creating a new resource.
      * @return Response
      */
-    public function create()
+    public function createFilter()
     {
         return view('dashboard::create');
     }
@@ -83,8 +66,27 @@ class DashboardController extends Controller
      * @param  Request $request
      * @return Response
      */
-    public function store(Request $request)
-    {
+    public function store(FilterSaveRequest $request)
+    {        
+        try
+        {
+            $this->repo->beginTransaction();
+            //if ($request->input('filter_save')) {
+
+            $data['name'] = $request->input('filter_name');
+            $data['public'] = $request->input('filter_type') == '1' ? true : false;
+            $data['url'] = $request->input('filter_url'); //json_encode($filter);
+
+            $this->repo->createFilter($data);
+            //}
+        } catch (\Execption $e) {
+            $this->repo->rollback();
+            report($e);
+            return back()->withErrors($e->getMessage())->withInput();
+        }
+
+        $this->repo->commit();
+        return redirect(url($request->input('filter_url')));
     }
 
     /**

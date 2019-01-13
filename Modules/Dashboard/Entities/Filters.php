@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Filters extends Model
 {
-    protected $fillable = ['name', 'user_id', 'public', 'fields'];
+    protected $fillable = ['name', 'user_id', 'public', 'url'];
 
     public function scopePrivate($query)
     {

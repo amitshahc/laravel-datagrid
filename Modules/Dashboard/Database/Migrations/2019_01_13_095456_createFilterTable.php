@@ -18,7 +18,7 @@ class CreateFilterTable extends Migration
             $table->unsignedInteger('user_id');
             $table->string('name', 100);
             $table->boolean('public');
-            $table->longText('fields');
+            $table->longText('url');
             $table->timestamps();
             $table->softDeletes();
             $table->engine = 'InnoDB';

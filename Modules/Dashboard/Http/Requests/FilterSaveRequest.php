@@ -4,7 +4,7 @@ namespace Modules\Dashboard\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CantactsRequest extends FormRequest
+class FilterSaveRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,16 +14,15 @@ class CantactsRequest extends FormRequest
     public function rules()
     {
         return [
-            //'email_value' => 'nullable|email',
-            'age_value' => 'nullable|numeric',            
+            //'filter_save' => 'required',
+            'filter_name' => 'required', //'required_if:filter_save,1',
+            'filter_type' => 'required', //'required_if:filter_save,1'
         ];
     }
 
     public function attributes()
     {
-        return [
-            'email_value' => 'Email',
-            'age_value' => 'Age',
+        return [     
             'filter_name' => 'Filter name',
             'filter_type' => 'Filter type'
         ];
@@ -32,8 +31,8 @@ class CantactsRequest extends FormRequest
     public function messages()
     {
         return [          
-            'filter_name.required_if' => ':attribute is mandatory when Save Filter is checked',
-            'filter_type.required_if' => ':attribute is mandatory when Save Filter is checked'
+            'filter_name.required' => ':attribute is mandatory to the Save Filter',
+            'filter_type.required' => ':attribute is mandatory to the Save Filter'
         ];
     }
 

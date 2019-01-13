@@ -14,4 +14,5 @@
 Route::group(['middleware' => ['web','auth'], 'prefix' => 'dashboard'], function() {
     Route::get('/', 'DashboardController@index')->name('contacts_dashboard');
     Route::get('/filter', 'DashboardController@filter')->name('contacts_filter');
+    Route::post('/filter', 'DashboardController@store')->name('create_filter');
 });

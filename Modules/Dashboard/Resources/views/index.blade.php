@@ -8,9 +8,9 @@
 <div class="table-responsive">
     <table class="table table-striped table-sm">
         <thead>
-            <form action="{{ route('contacts_filter') }}" method="GET" class="">
-                {{-- @method('POST')
-                @csrf --}}
+            <form action="{{ route('create_filter') }}" method="POST" class="">
+                @method('POST')
+                @csrf
                 @if(!$contacts->isEmpty())
                 <tr>
                     <td colspan="6">
@@ -27,40 +27,48 @@
 
                 <tr>
                     <td colspan="3">
-                        Save Filter : <input type="checkbox" name="filter_save" value="1">
+                        {{-- Save applied Filter : <input type="checkbox" name="filter_save" value="1">
+                        &nbsp; --}}
+                        Name: <input type="text" name="filter_name" value="{{ old('filter_name')}} ">
                         &nbsp;
-                        Name: <input type="text" name="filter_name">
+                        Public: <input type="radio" name="filter_type" value="1" @if (old('filter_type') == '1') {{ 'checked' }} @endif>
                         &nbsp;
-                        Public: <input type="radio" name="filter_type" value="1">
-                        &nbsp;
-                        Private: <input type="radio" name="filter_type" value="0">
+                        Private: <input type="radio" name="filter_type" value="0" @if (old('filter_type') == '0') {{ 'checked' }} @endif>
+                        <input type="hidden" name="filter_url" value="{{ Request::getPathInfo() .'?'. Request::getQueryString()}}" />
+                        <input type="submit" class="btn btn-success btn-sm" value="Save" />
                     </td>
 
                     <td colspan="3">
                         Saved Filter
                         <br />
                         Public: 
-                        <select name="filters_public" id="" style="width:20%">
+                        <select name="filters_public" id="" style="width:20%" onChange="fillForm(this)">
+                            <option value="">-</option>
                             @if(!$filters_public->isEmpty())
                             @foreach ($filters_public as $filter)
-                            <option value="{{$filter->id}}">{{$filter->name}}</option>
+                            <option value="{{$filter->url}}">{{$filter->name}}</option>
                             @endforeach
                             @endif
                         </select>
                         &nbsp;
                         Private: 
-                        <select name="filters_private" id="" style="width:20%">
+                        <select name="filters_private" id="" style="width:20%" onChange="fillForm(this)">
+                            <option value="">-</option>
                             @if(!$filters_private->isEmpty())
                             @foreach ($filters_private as $filter)
-                            <option value="{{$filter->id}}">{{$filter->name}}</option>
+                            <option value="{{$filter->url}}">{{$filter->name}}</option>
                             @endforeach
                             @endif
                         </select>
                     </td>
                 </tr>
+                </form>
+                
+                <form action="{{ route('contacts_filter') }}" method="GET" class="">
                 <tr>
                     <th>
-                        <input type="submit" value="Filter" class="btn-info">
+                        <input type="submit" value="Filter" class="btn btn-info btn-sm">
+                        <a class="btn btn-danger btn-sm" href="/dashboard">Clear</a>
                     </th>
                     <th>
                         <select name="name_operator" id="" class="form-control-sm">
@@ -144,3 +152,13 @@
     </table>
 </div>
 @stop
+
+
+@push('post_body')
+    <script>
+    function fillForm(ctl){
+        console.log(ctl.value);
+        window.location.href = ctl.value;
+    }
+    </script>
+@endpush
