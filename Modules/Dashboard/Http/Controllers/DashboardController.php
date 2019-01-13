@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Dashboard\Entities\Repository\Interfaces\Contacts as ContactsRepository;
+use Modules\Dashboard\Http\Requests\CantactsRequest;
 
 class DashboardController extends Controller
 {
@@ -25,7 +26,7 @@ class DashboardController extends Controller
         return view('dashboard::index', compact('contacts'));
     }
 
-    public function filter(Request $request)
+    public function filter(CantactsRequest $request)
     {        
         $filter = $request->only('name_operator','name_value','email_operator','email_value', 'phone_operator','phone_value',	'gender_value', 'age_operator','age_value');
         $contacts = $this->repo->getFilteredList(array_filter($filter));
