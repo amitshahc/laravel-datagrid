@@ -33,10 +33,19 @@
 <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-sm-0 col-md-0 mr-0" href="#">Company name</a>
-        {{-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> --}}
+        {{-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        --}}
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sign out</a>
+                {{-- <a class="nav-link" href="#">Sign out</a> --}}
+                <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                    {{ __('Logout') }}
+                </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </li>
         </ul>
     </nav>
@@ -46,9 +55,9 @@
             <nav class="col-md-0 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
-                        
+
                     </ul>
-                    
+
                 </div>
             </nav>
 
@@ -66,10 +75,10 @@
                         </button>
                     </div> --}}
                 </div>
-                
+
 
                 @yield('content')
-                
+
             </main>
         </div>
     </div>
@@ -84,6 +93,6 @@
         crossorigin="anonymous"></script>
     {{-- <script src="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
         crossorigin="anonymous"></script> --}}
-        
+
 
 </html>
