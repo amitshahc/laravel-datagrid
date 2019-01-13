@@ -7,30 +7,47 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Dashboard\Entities\Repository\Interfaces\Contacts as ContactsRepository;
 use Modules\Dashboard\Http\Requests\CantactsRequest;
+use Auth;
 
 class DashboardController extends Controller
 {
     protected $repo;
+    protected $userId;
 
     public function __construct(ContactsRepository $repo)
     {
         $this->repo = $repo;
+
+        $this->middleware(function ($request, $next) {            
+            $this->userId = Auth::user()->id;
+            $this->repo->setUserId($this->userId);
+            return $next($request);
+        });
     }
     /**
      * Display a listing of the resource.
      * @return Response
      */
     public function index()
-    {//return $request;
+    {
         $contacts = $this->repo->getList();
         return view('dashboard::index', compact('contacts'));
     }
 
     public function filter(CantactsRequest $request)
-    {        
-        $filter = $request->only('name_operator','name_value','email_operator','email_value', 'phone_operator','phone_value',	'gender_value', 'age_operator','age_value');
+    {
+        $filter = $request->only('name_operator', 'name_value', 'email_operator', 'email_value', 'phone_operator', 'phone_value', 'gender_value', 'age_operator', 'age_value');
         $contacts = $this->repo->getFilteredList(array_filter($filter));
         $contacts->appends($filter)->links(); //Continue pagination with results
+
+        if ($request->input('filter_save')) {            
+            
+            $data['name'] = $request->input('filter_name');
+            $data['public'] = $request->input('filter_type') == '1' ? true : false;
+            $data['fields'] = json_encode($filter);
+
+            $this->repo->createFilter($data);
+        }
         return view('dashboard::index', compact('contacts'))->withInput($request->all());
     }
     /**

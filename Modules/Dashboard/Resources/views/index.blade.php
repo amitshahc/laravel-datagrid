@@ -27,8 +27,10 @@
 
                 <tr>
                     <td colspan="3">
-                        Save Filter <input type="checkbox">
+                        Save Filter : <input type="checkbox" name="filter_save" value="1">
+                        &nbsp;
                         Name: <input type="text" name="filter_name">
+                        &nbsp;
                         Public: <input type="radio" name="filter_type" value="1">
                         &nbsp;
                         Private: <input type="radio" name="filter_type" value="0">
@@ -36,9 +38,9 @@
 
                     <td colspan="3">
                         Saved Filter                        
-                        Public: <select name="" id=""></select>
+                        Public: <select name="filters_public" id=""></select>
                         &nbsp;
-                        Private: <select name="" id=""></select>
+                        Private: <select name="filters_private" id=""></select>
                     </td>
                 </tr>
                 <tr>

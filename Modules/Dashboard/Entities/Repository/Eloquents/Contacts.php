@@ -2,59 +2,40 @@
 
 namespace Modules\Dashboard\Entities\Repository\Eloquents;
 
-use Modules\Dashboard\Entities\Repository\Interfaces\Contacts as ContactsContract;
 use Modules\Dashboard\Entities\Contacts as ContactsModel;
+use Modules\Dashboard\Entities\Repository\Interfaces\Contacts as ContactsContract;
+use Modules\Dashboard\Entities\Repository\Traits\Contacts as ContactsTrait;
+use Modules\Dashboard\Entities\Repository\Traits\Filters as FiltersTrait;
 
 class Contacts implements ContactsContract
 {
+    use ContactsTrait;
+    use FiltersTrait;
     protected $model;
+    protected $userId;
 
     public function __construct(ContactsModel $model)
     {
         $this->model = $model;
     }
 
-    public function getList(){
-        // \DB::enableQueryLog();
-        //return $this->model::select('id','name','email','phone','gender','age')->limit(100)->get();
-        return $this->model::select('id','name','email','phone','gender','age')->paginate(100);
-        // dd(\DB::getQueryLog());
+    public function setUserId($id)
+    {
+        $this->userId = $id;
     }
 
-    public function getFilteredList($filter)
+    public function beginTransaction()
     {
-        \DB::enableQueryLog();
-        $query = $this->model::select('id','name','email','phone','gender','age');
-        
-        if(isset($filter['name_value']) && isset($filter['name_operator']))
-        {
-            $filter['name_value'] = $filter['name_operator'] === 'like' ? '%'.$filter['name_value'].'%': $filter['name_value'];
-            $query = $query->where('name',$filter['name_operator'],$filter['name_value']);
-        }
+        \DB::beginTransaction();
+    }
 
-        if(isset($filter['email_value']) && isset($filter['email_operator']))
-        {
-            $filter['email_value'] = $filter['email_operator'] === 'like' ? '%'.$filter['email_value'].'%': $filter['email_value'];
-            $query = $query->where('email',$filter['email_operator'],$filter['email_value']);
-        }
+    public function rollBack()
+    {
+        \DB::rollBack();
+    }
 
-        if(isset($filter['phone_value']) && isset($filter['phone_operator']))
-        {
-            $filter['phone_value'] = $filter['phone_operator'] === 'like' ? '%'.$filter['phone_value'].'%': $filter['phone_value'];
-            $query = $query->where('phone',$filter['phone_operator'],$filter['phone_value']);
-        }        
-
-        if(isset($filter['gender_value']))
-        {        
-            $query = $query->where('gender', $filter['gender_value']);
-        }
-
-        if(isset($filter['age_value']) && isset($filter['age_operator']))
-        {        
-            $query = $query->where('age', $filter['age_operator'], $filter['age_value']);
-        }
-        
-        return $query->paginate(100);
-        //dd(\DB::getQueryLog());
+    public function commit()
+    {
+        \DB::commit();
     }
 }

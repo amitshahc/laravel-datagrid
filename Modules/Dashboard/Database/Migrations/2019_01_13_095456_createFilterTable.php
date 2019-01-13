@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateFilterTable extends Migration
 {
@@ -17,9 +17,10 @@ class CreateFilterTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id');
             $table->string('name', 100);
-            $table->boolean('public');            
+            $table->boolean('public');
+            $table->longText('fields');
             $table->timestamps();
-            $table->softDeletes();            
+            $table->softDeletes();
             $table->engine = 'InnoDB';
             $table->foreign('user_id')->references('id')->on('users');
             // $table->charset = 'utf8';
