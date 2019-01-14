@@ -16,9 +16,9 @@ trait Filters
 
     public function getFilters_public()
     {
-        $user = UserModel::findOrFail($this->userId);        
-        return $user->filters()->public()->get();
-        //return FilterModel::wherePublic(true)->get();
+        // $user = UserModel::findOrFail($this->userId);        
+        // return $user->filters()->public()->get();
+        return FilterModel::wherePublic(true)->get();
     }
 
     public function getFilters_private()
