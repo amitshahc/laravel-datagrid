@@ -29,20 +29,24 @@
                     <td colspan="3">
                         {{-- Save applied Filter : <input type="checkbox" name="filter_save" value="1">
                         &nbsp; --}}
-                        Name: <input type="text" name="filter_name" value="{{ old('filter_name')}} ">
+                        <label for="">Save applied Filter :</label>
+                        <br />
+                        Name: <input type="text" name="filter_name" value="{{ old('filter_name')}} " class="form-control-sm">
                         &nbsp;
-                        Public: <input type="radio" name="filter_type" value="1" @if (old('filter_type') == '1') {{ 'checked' }} @endif>
+                        <label for="filter_type1">Public:</label>  
+                        <input type="radio" name="filter_type" id="filter_type1" value="1" @if (old('filter_type') == '1') {{ 'checked' }} @endif />
                         &nbsp;
-                        Private: <input type="radio" name="filter_type" value="0" @if (old('filter_type') == '0') {{ 'checked' }} @endif>
+                        <label for="filter_type0">Private:</label>  
+                        <input type="radio" name="filter_type" id="filter_type0" value="0" @if (old('filter_type') == '0') {{ 'checked' }} @endif />
                         <input type="hidden" name="filter_url" value="{{ Request::getPathInfo() .'?'. Request::getQueryString()}}" />
                         <input type="submit" class="btn btn-success btn-sm" value="Save" />
                     </td>
 
                     <td colspan="3">
-                        Saved Filter
+                        <label>Apply saved Filter:</label>
                         <br />
                         Public: 
-                        <select name="filters_public" id="" style="width:20%" onChange="fillForm(this)">
+                        <select name="filters_public" id="" style="width:20%" onChange="fillForm(this)" class="form-control-sm">
                             <option value="">-</option>
                             @if(!$filters_public->isEmpty())
                             @foreach ($filters_public as $filter)
@@ -52,7 +56,7 @@
                         </select>
                         &nbsp;
                         Private: 
-                        <select name="filters_private" id="" style="width:20%" onChange="fillForm(this)">
+                        <select name="filters_private" id="" style="width:20%" onChange="fillForm(this)" class="form-control-sm">
                             <option value="">-</option>
                             @if(!$filters_private->isEmpty())
                             @foreach ($filters_private as $filter)
